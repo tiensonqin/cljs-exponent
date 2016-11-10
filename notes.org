@@ -1,0 +1,47 @@
+* exponent
+** Auto-generated vs manually
+   manually better docs
+   auto generated better to maintain
+*** Api
+**** DONE Amplitude
+     CLOSED: [2016-11-10 Thu 14:36]
+**** DONE Asset
+     CLOSED: [2016-11-10 Thu 14:36]
+**** DONE Constants
+     CLOSED: [2016-11-10 Thu 14:59]
+**** DONE Contacts
+     CLOSED: [2016-11-10 Thu 15:15]
+**** DONE Facebook
+     CLOSED: [2016-11-10 Thu 15:15]
+**** DONE Font
+     CLOSED: [2016-11-10 Thu 15:15]
+**** DONE Google
+     CLOSED: [2016-11-10 Thu 15:15]
+**** DONE ImagePicker
+     CLOSED: [2016-11-10 Thu 15:22]
+**** DONE Location
+     CLOSED: [2016-11-10 Thu 15:25]
+**** DONE Permissions
+     CLOSED: [2016-11-10 Thu 15:29]
+**** DONE Segment
+     CLOSED: [2016-11-10 Thu 15:36]
+**** Util
+** Components
+   Should support both Om next and Reagent, maybe later rum
+*** AppLoading
+*** BarCodeScanner
+*** BlurView
+*** GLView
+*** LinearGradient
+*** MapView
+*** Svg
+*** Video
+
+** Release version rules
+   sdk_version + date
+   For example, 11.20160102
+
+** Modules
+   exponent.API
+   exponent.om
+   exponent.reagent
