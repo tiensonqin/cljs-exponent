@@ -2,7 +2,11 @@
 
 [Exponent.js](https://getexponent.com/) clojurescript binding.
 
-## Usage
+[documentation](https://tiensonqin.github.io/cljs-exponent)
+
+[![Clojars Project](https://img.shields.io/clojars/v/cljs-exponent.svg)](https://clojars.org/cljs-exponent)
+
+## Usage examples
 
 ### Api
 
@@ -50,7 +54,7 @@ Supports both [Om](https://github.com/omcljs/om) and [Reagent](https://github.co
 
 ## License
 
-Copyright © 2016 tiensonqin@gmail.com
+Copyright © 2016 Tienson Qin
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
