@@ -4,7 +4,7 @@
 
 (def Location (aget exponent "Location"))
 
-(def get-current-position-async
+(defn get-current-position-async
   "Get the current position of the device.
 
    Arguments
