@@ -1,8 +1,7 @@
 (ns cljs-exponent.components
   #?(:clj (:require [clojure.string :as str]))
   #?(:cljs (:require [clojure.string :as str]
-                     [cljs-exponent.core]
-                     [reagent.core])))
+                     [cljs-exponent.core])))
 
 ;; React Native v0.36.0
 (def rn-apis
@@ -105,11 +104,6 @@
 (defn sp [js-name]
   (str/split js-name #"\."))
 
-#?(:cljs
-   (defn element [element opts & children]
-     (if element
-       (apply (aget cljs-exponent.core/react "createElement") element (clj->js opts) children))))
-
 #?(:clj
    (defn wrap-rn-api [js-name]
      `(def ~(symbol (to-kebab js-name))
@@ -120,46 +114,41 @@
      (let [v (sp js-name)]
        (if (= 1 (count v))
          `(def ~(symbol (to-kebab js-name))
-            (partial cljs-exponent.components/element (aget cljs-exponent.core/react-native ~js-name)))
+            (partial cljs-exponent.om/element (aget cljs-exponent.core/react-native ~js-name)))
          `(def ~(symbol (to-kebab js-name))
-            (partial cljs-exponent.components/element (aget cljs-exponent.core/react-native ~(first v) ~(second v))))))))
+            (partial cljs-exponent.om/element (aget cljs-exponent.core/react-native ~(first v) ~(second v))))))))
 
 #?(:clj
    (defn wrap-ex-component [js-name]
      `(def ~(symbol (to-kebab js-name))
-        (partial cljs-exponent.components/element (aget cljs-exponent.core/exponent "Components" ~js-name)))))
+        (partial cljs-exponent.om/element (aget cljs-exponent.core/exponent "Components" ~js-name)))))
 
 #?(:clj
    (defn wrap-glview []
      `(def ~'gl-view
-        (partial cljs-exponent.components/element (aget cljs-exponent.core/exponent "GLView")))))
-
-#?(:cljs
-   (defn safe-adapt-react-class [component]
-     (if component
-       (reagent.core/adapt-react-class component))))
+        (partial cljs-exponent.om/element (aget cljs-exponent.core/exponent "GLView")))))
 
 #?(:clj
    (defn wrap-rn-reagent-component [js-name]
      (let [v (sp js-name)]
        (if (= 1 (count v))
          `(def ~(symbol (to-kebab js-name))
-            (cljs-exponent.components/safe-adapt-react-class
+            (cljs-exponent.reagent/safe-adapt-react-class
              (cljs.core/aget cljs-exponent.core/react-native ~js-name)))
          `(def ~(symbol (to-kebab js-name))
-            (cljs-exponent.components/safe-adapt-react-class
+            (cljs-exponent.reagent/safe-adapt-react-class
              (aget cljs-exponent.core/react-native ~(first v) ~(second v))))))))
 
 #?(:clj
    (defn wrap-ex-reagent-component [js-name]
      `(def ~(symbol (to-kebab js-name))
-        (safe-adapt-react-class
+        (cljs-exponent.reagent/safe-adapt-react-class
          (cljs.core/aget cljs-exponent.core/exponent "Components" ~js-name)))))
 
 #?(:clj
    (defn wrap-reagent-glview []
      `(def ~'gl-view
-        (safe-adapt-react-class
+        (cljs-exponent.reagent/safe-adapt-react-class
          (cljs.core/aget cljs-exponent.core/exponent "GLView")))))
 
 #?(:clj

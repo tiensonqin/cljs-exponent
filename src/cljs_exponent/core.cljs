@@ -11,3 +11,6 @@
 (def exponent
   (when (exists? js/require)
     (js/require "exponent")))
+
+(when react-native
+  (set! js/window.React react))
