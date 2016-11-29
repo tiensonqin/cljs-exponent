@@ -23,13 +23,13 @@ Supports both [Om](https://github.com/omcljs/om) and [Reagent](https://github.co
 #### Om
 
 ``` clojure
-(require '[cljs-exponent.om :as c])
+(require '[cljs-exponent.om :as rn])
 
-(c/text "hi")
+(rn/text "hi")
 
-(.alert c/alert "This is an alert!")
+(.alert rn/alert "This is an alert!")
 
-(c/linear-gradient
+(rn/linear-gradient
  {:colors ["#4c669f" "#3b5998" "#192f6a"]
   :style {:padding 15
           :alignItems "center"
@@ -43,13 +43,13 @@ Supports both [Om](https://github.com/omcljs/om) and [Reagent](https://github.co
 #### Reagent
 
 ``` clojure
-(require '[cljs-exponent.reagent :as c])
+(require '[cljs-exponent.reagent :as rn])
 
-[c/text "hi"]
+[rn/text "hi"]
 
-(.alert c/alert "This is an alert!")
+(.alert rn/alert "This is an alert!")
 
-[c/linear-gradient
+[rn/linear-gradient
  {:colors ["#4c669f" "#3b5998" "#192f6a"]
   :style {:padding 15
           :align-items "center"
