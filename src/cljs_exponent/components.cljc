@@ -1,7 +1,49 @@
 (ns cljs-exponent.components
   #?(:clj (:require [clojure.string :as str]))
   #?(:cljs (:require [clojure.string :as str]
-                     [cljs-exponent.core])))
+                     [cljs-exponent.core]
+                     [reagent.core])))
+
+;; React Native v0.36.0
+(def rn-apis
+  ["ActionSheetIOS"
+   "AdSupportIOS"
+   "Alert"
+   "AlertIOS"
+   "Animated"
+   "AppRegistry"
+   "AppState"
+   "AsyncStorage"
+   "BackAndroid"
+   "CameraRoll"
+   "Clipboard"
+   "DatePickerAndroid"
+   "Dimensions"
+   "Easing"
+   "Geolocation"
+   "ImageEditor"
+   "ImagePickerIOS"
+   "ImageStore"
+   "IntentAndroid"
+   "InteractionManager"
+   "Keyboard"
+   "LayoutAnimation"
+   "Linking"
+   "NativeMethodsMixin"
+   "NativeModules"
+   "NetInfo"
+   "PanResponder"
+   "PermissionsAndroid"
+   "PixelRatio"
+   "PushNotificationIOS"
+   "Settings"
+   "StatusBarIOS"
+   "StyleSheet"
+   "Systrace"
+   "TimePickerAndroid"
+   "ToastAndroid"
+   "Vibration"
+   "VibrationIOS"])
 
 (def rn-components
   ["ActivityIndicator"
@@ -14,7 +56,6 @@
    "DrawerLayoutAndroid"
    "Image"
    "ListView"
-   "MapView"
    "Modal"
    "Navigator"
    "NavigatorIOS"
@@ -52,9 +93,6 @@
    "Svg"
    "Video"])
 
-(def components
-  (distinct (concat rn-components ex-components)))
-
 ;; copy from natal-shell
 (def camel-rx #"([a-z])([A-Z])")
 
@@ -64,54 +102,78 @@
       (str/replace "." "-")
       str/lower-case))
 
+(defn sp [js-name]
+  (str/split js-name #"\."))
+
 #?(:cljs
    (defn element [element opts & children]
-     (apply (aget cljs-exponent.core/react "createElement") element (clj->js opts) children)))
+     (if element
+       (apply (aget cljs-exponent.core/react "createElement") element (clj->js opts) children))))
 
 #?(:clj
-   (defn wrap-component [js-name]
+   (defn wrap-rn-api [js-name]
      `(def ~(symbol (to-kebab js-name))
-        (partial element (aget cljs-exponent.core/exponent "Components" ~js-name)))))
+        (aget cljs-exponent.core/react-native ~js-name))))
+
+#?(:clj
+   (defn wrap-rn-component [js-name]
+     (let [v (sp js-name)]
+       (if (= 1 (count v))
+         `(def ~(symbol (to-kebab js-name))
+            (partial cljs-exponent.components/element (aget cljs-exponent.core/react-native ~js-name)))
+         `(def ~(symbol (to-kebab js-name))
+            (partial cljs-exponent.components/element (aget cljs-exponent.core/react-native ~(first v) ~(second v))))))))
+
+#?(:clj
+   (defn wrap-ex-component [js-name]
+     `(def ~(symbol (to-kebab js-name))
+        (partial cljs-exponent.components/element (aget cljs-exponent.core/exponent "Components" ~js-name)))))
 
 #?(:clj
    (defn wrap-glview []
      `(def ~'gl-view
-        (partial element (aget cljs-exponent.core/exponent "GLView")))))
+        (partial cljs-exponent.components/element (aget cljs-exponent.core/exponent "GLView")))))
+
+#?(:cljs
+   (defn safe-adapt-react-class [component]
+     (if component
+       (reagent.core/adapt-react-class component))))
 
 #?(:clj
-   (defn wrap-reagent-component [js-name]
+   (defn wrap-rn-reagent-component [js-name]
+     (let [v (sp js-name)]
+       (if (= 1 (count v))
+         `(def ~(symbol (to-kebab js-name))
+            (cljs-exponent.components/safe-adapt-react-class
+             (cljs.core/aget cljs-exponent.core/react-native ~js-name)))
+         `(def ~(symbol (to-kebab js-name))
+            (cljs-exponent.components/safe-adapt-react-class
+             (aget cljs-exponent.core/react-native ~(first v) ~(second v))))))))
+
+#?(:clj
+   (defn wrap-ex-reagent-component [js-name]
      `(def ~(symbol (to-kebab js-name))
-        (reagent.core/adapt-react-class
+        (safe-adapt-react-class
          (cljs.core/aget cljs-exponent.core/exponent "Components" ~js-name)))))
 
 #?(:clj
    (defn wrap-reagent-glview []
      `(def ~'gl-view
-        (reagent.core/adapt-react-class
+        (safe-adapt-react-class
          (cljs.core/aget cljs-exponent.core/exponent "GLView")))))
 
 #?(:clj
    (defmacro wrap-all-om []
      `(do
-        ~(wrap-glview)
-        ~@(map wrap-component components))))
+        ~@(map wrap-rn-api rn-apis)
+        ~@(map wrap-rn-component rn-components)
+        ~@(map wrap-ex-component ex-components)
+        ~(wrap-glview))))
 
 #?(:clj
    (defmacro wrap-all-reagent []
      `(do
-        ~(wrap-reagent-glview)
-        ~@(map wrap-reagent-component components))))
-
-
-;; TODO expose wrap-components api
-
-;; (defmacro wrap-components [f components]
-;;   `(do ~@(map ~f components)))
-
-;; (defn wrap-all-om
-;;   []
-;;   (wrap-component wrap-om-component components))
-
-;; (defn wrap-all-reagent
-;;   []
-;;   (wrap-component wrap-reagent-component components))
+        ~@(map wrap-rn-api rn-apis)
+        ~@(map wrap-rn-reagent-component rn-components)
+        ~@(map wrap-ex-reagent-component ex-components)
+        ~(wrap-reagent-glview))))

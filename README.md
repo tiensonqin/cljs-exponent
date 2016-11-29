@@ -1,6 +1,6 @@
 # cljs-exponent
 
-[Exponent.js](https://getexponent.com/) clojurescript binding.
+[Exponent.js](https://getexponent.com/) and React Native' clojurescript binding.
 
 [documentation](https://tiensonqin.github.io/cljs-exponent)
 
@@ -17,15 +17,19 @@
                               (aget contacts/Contacts "EMAIL")])
 ```
 
-### Components
+### Components and APIs
 Supports both [Om](https://github.com/omcljs/om) and [Reagent](https://github.com/reagent-project/reagent).
 
 #### Om
 
 ``` clojure
-(require '[cljs-exponent.om :as ex])
+(require '[cljs-exponent.om :as c])
 
-(ex/linear-gradient
+(c/text "hi")
+
+(.alert c/alert "This is an alert!")
+
+(c/linear-gradient
  {:colors ["#4c669f" "#3b5998" "#192f6a"]
   :style {:padding 15
           :alignItems "center"
@@ -39,9 +43,13 @@ Supports both [Om](https://github.com/omcljs/om) and [Reagent](https://github.co
 #### Reagent
 
 ``` clojure
-(require '[cljs-exponent.reagent :as ex])
+(require '[cljs-exponent.reagent :as c])
 
-[ex/linear-gradient
+[c/text "hi"]
+
+(.alert c/alert "This is an alert!")
+
+[c/linear-gradient
  {:colors ["#4c669f" "#3b5998" "#192f6a"]
   :style {:padding 15
           :align-items "center"
