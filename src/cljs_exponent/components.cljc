@@ -1,7 +1,7 @@
 (ns cljs-exponent.components
   #?(:clj (:require [clojure.string :as str]))
   #?(:cljs (:require [clojure.string :as str]
-                     [cljs-exponent.core :as core])))
+                     [cljs-exponent.core])))
 
 (def components
   ["AppLoading"
@@ -10,12 +10,7 @@
    "LinearGradient"
    "MapView"
    "Svg"
-   "Video"
-
-   ;; SDK11
-
-   ;; "GLView"
-   ])
+   "Video"])
 
 ;; copy from natal-shell
 (def camel-rx #"([a-z])([A-Z])")
@@ -31,12 +26,17 @@
 
 #?(:cljs
    (defn element [element opts & children]
-     (apply (aget core/react "createElement") element (clj->js opts) children)))
+     (apply (aget cljs-exponent.core/react "createElement") element (clj->js opts) children)))
 
 #?(:clj
    (defn wrap-component [js-name]
      `(def ~(symbol (to-kebab js-name))
         (partial element (aget cljs-exponent.core/exponent "Components" ~js-name)))))
+
+#?(:clj
+   (defn wrap-glview []
+     `(def ~'gl-view
+        (partial element (aget cljs-exponent.core/exponent "GLView")))))
 
 #?(:clj
    (defn wrap-reagent-component [js-name]
@@ -45,12 +45,22 @@
          (cljs.core/aget cljs-exponent.core/exponent "Components" ~js-name)))))
 
 #?(:clj
+   (defn wrap-reagent-glview []
+     `(def ~'gl-view
+        (reagent.core/adapt-react-class
+         (cljs.core/aget cljs-exponent.core/exponent "GLView")))))
+
+#?(:clj
    (defmacro wrap-all-om []
-     `(do ~@(map wrap-component components))))
+     `(do
+        ~(wrap-glview)
+        ~@(map wrap-component components))))
 
 #?(:clj
    (defmacro wrap-all-reagent []
-     `(do ~@(map wrap-reagent-component components))))
+     `(do
+        ~(wrap-reagent-glview)
+        ~@(map wrap-reagent-component components))))
 
 
 ;; TODO expose wrap-components api
