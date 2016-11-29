@@ -3,7 +3,47 @@
   #?(:cljs (:require [clojure.string :as str]
                      [cljs-exponent.core])))
 
-(def components
+(def rn-components
+  ["ActivityIndicator"
+   "Animated.Image"
+   "Animated.Text"
+   "Animated.View"
+   "Animated.ScrollView"
+   "DatePickerIOS"
+   "KeyboardAvoidingView"
+   "DrawerLayoutAndroid"
+   "Image"
+   "ListView"
+   "MapView"
+   "Modal"
+   "Navigator"
+   "NavigatorIOS"
+   "Picker"
+   "PickerIOS"
+   "ProgressBarAndroid"
+   "ProgressViewIOS"
+   "RefreshControl"
+   "ScrollView"
+   "SegmentedControlIOS"
+   "Slider"
+   "SliderIOS"
+   "StatusBar"
+   "SnapshotViewIOS"
+   "Switch"
+   "TabBarIOS"
+   "TabBarIOS.Item"
+   "Text"
+   "TextInput"
+   "ToolbarAndroid"
+   "TouchableHighlight"
+   "TouchableNativeFeedback"
+   "TouchableOpacity"
+   "TouchableWithoutFeedback"
+   "View"
+   "ViewPagerAndroid"
+   "WebView"])
+
+(def ex-components
   ["AppLoading"
    "BarCodeScanner"
    "BlurView"
@@ -11,6 +51,9 @@
    "MapView"
    "Svg"
    "Video"])
+
+(def components
+  (distinct (concat rn-components ex-components)))
 
 ;; copy from natal-shell
 (def camel-rx #"([a-z])([A-Z])")
@@ -20,9 +63,6 @@
       (str/replace camel-rx "$1-$2")
       (str/replace "." "-")
       str/lower-case))
-
-(defn to-snake [s]
-  (str/lower-case (str/replace s camel-rx "$1_$2")))
 
 #?(:cljs
    (defn element [element opts & children]
