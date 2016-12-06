@@ -34,7 +34,7 @@
    "PanResponder"
    "PermissionsAndroid"
    "PixelRatio"
-   "PushNotificationIOS"
+   ;; "PushNotificationIOS"
    "Settings"
    "StatusBarIOS"
    "StyleSheet"
