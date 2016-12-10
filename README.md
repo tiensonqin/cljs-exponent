@@ -18,12 +18,12 @@
 ```
 
 ### Components and APIs
-Supports both [Om](https://github.com/omcljs/om) and [Reagent](https://github.com/reagent-project/reagent).
+Supports both [Om](https://github.com/omcljs/om), [Reagent](https://github.com/reagent-project/reagent) and [Rum](https://github.com/tonsky/rum).
 
-#### Om
+#### Om or Rum
 
 ``` clojure
-(require '[cljs-exponent.om :as rn])
+(require '[cljs-exponent.components :as rn])
 
 (rn/text "hi")
 
