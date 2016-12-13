@@ -19,4 +19,5 @@ to access their Facebook data.
      If the user or Facebook cancelled the login, returns { type: 'cancel' }.
      Otherwise, returns { type: 'success', token, expires }. token is a string giving the access token to use with Facebook HTTP API requests. expires is the time at which this token will expire, as seconds since epoch. You can save the access token using, say, AsyncStorage, and use it till the expiration time."
   [app-id options]
-  (.logInWithReadPermissionsAsync Facebook app-id (clj->js options)))
+  (.call (aget Facebook "logInWithReadPermissionsAsync")
+         Facebook app-id (clj->js options)))

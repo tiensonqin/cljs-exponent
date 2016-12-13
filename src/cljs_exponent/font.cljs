@@ -13,7 +13,8 @@
 
   Returns:
     Doesn't return anything and simply awaits till the font is available to use."
-   (.loadAsync Font name url))
+   (.call (aget Font "loadAsync")
+          Font name url))
   ([fonts-map]
    "Convenience form of Exponent.Font.loadAsync() that loads multiple fonts at once.
 
@@ -21,7 +22,8 @@
    map (object) -- A map of names to urls as in Exponent.Font.loadAsync().
    Returns:
    Doesn't return anything and simply awaits till all fonts are available to use."
-   (.loadAsync Font (clj->js fonts-map))))
+   (.call (aget Font "loadAsync")
+          Font (clj->js fonts-map))))
 
 (defn style
   "Return style properties to use with a Text or other React Native component. It is safe to call this function before calling Exponent.Font.loadAsync(); it will still return the correct style properties. This way you can use this function with StyleSheet.create().
@@ -31,4 +33,5 @@
    Returns:
      An object with style attributes to use in a Text or similar component."
   [name]
-  (.style Font name))
+  (.call (aget Font "style")
+         Font name))

@@ -17,7 +17,8 @@
        If the user cancelled the image picking, returns { cancelled: true }.
        Otherwise, returns { cancelled: false, uri, width, height } where uri is a URI to the local image file (useable in a react-native Image tag) and width, height specify the dimensions of the image."
   [options]
-  (.launchImageLibraryAsync ImagePicker (clj->js options)))
+  (.call (aget ImagePicker "launchImageLibraryAsync")
+         ImagePicker (clj->js options)))
 
 (defn launch-camera-async
   "Display the system UI for taking a photo with the camera.
@@ -32,4 +33,5 @@
        If the user cancelled taking a photo, returns { cancelled: true }.
        Otherwise, returns { cancelled: false, uri, width, height } where uri is a URI to the local image file (useable in a React Native Image tag) and width, height specify the dimensions of the image."
   [options]
-  (.launchCameraAsync ImagePicker (clj->js options)))
+  (.call (aget ImagePicker "launchCameraAsync")
+         ImagePicker (clj->js options)))

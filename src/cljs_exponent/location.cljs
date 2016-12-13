@@ -54,4 +54,6 @@ Returns a subscription object, which has one field:
 
 remove (function) -- Call this function with no arguments to remove this subscription. The callback will no longer be called for location updates."
   [options callback]
-  (.watchPositionAsync exponent (clj->js options) callback))
+  (.call (aget Location "watchPositionAsync")
+         Location
+         (clj->js options) callback))

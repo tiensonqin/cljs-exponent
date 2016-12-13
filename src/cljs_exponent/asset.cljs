@@ -5,4 +5,6 @@
 (defn from-module
   "Returns the Exponent.Asset instance representing an asset given its module."
   [module]
-  (.fromModule (aget exponent "Asset") module))
+  (let [Asset (aget exponent "Asset")]
+    (.call (aget Asset "fromModule")
+           module)))

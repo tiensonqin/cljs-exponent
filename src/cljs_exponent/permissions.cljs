@@ -13,7 +13,8 @@
    Returns
      Returns a Promise that is resolved with the information about the permission, including status, expiration and scope (if it applies to the permission type)."
   [type]
-  (.getAsync Permissions type))
+  (.call (aget Permissions "getAsync")
+         Permissions type))
 
 (defn ask-async
   "Prompt the user for a permission. If they have already granted access, response will be success.
@@ -24,7 +25,8 @@
    Returns
      Returns a Promise that is resolved with the information about the permission, including status, expiration and scope (if it applies to the permission type)."
   [type]
-  (.askAsync Permissions type))
+  (.call (aget Permissions "askAsync")
+         Permissions type))
 
 (def ^{:doc "The permission type for push notifications.
 Note: On iOS, this does not disambiguate undetermined from denied and so will only ever return granted or undetermined. This is due to the way the underlying native API is implemented."}

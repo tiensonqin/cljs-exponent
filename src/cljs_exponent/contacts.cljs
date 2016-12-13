@@ -2,7 +2,7 @@
   "Provides access to the phone's system contacts."
   (:require [cljs-exponent.core :refer [exponent]]))
 
-(def Contacts (get exponent "Contacts"))
+(def Contacts (aget exponent "Contacts"))
 
 (defn get-contacts-async
   "Get a list of all entries in the system contacts. This returns the name and optionally phone number and email of each contact.
@@ -12,4 +12,5 @@
   Returns:
     An array of objects of the form { id, name, phoneNumber, email } with phoneNumber and email only present if they were requested through the fields parameter."
   [fields]
-  (.getContactsAsync Contacts (clj->js fields)))
+  (.call (aget Contacts "getContactsAsync")
+         Contacts (clj->js fields)))

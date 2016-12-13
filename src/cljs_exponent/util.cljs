@@ -7,4 +7,5 @@
 (defn get-current-locale-async
   "Returns the current device locale as a string."
   []
-  (.getCurrentLocaleAsync Util))
+  (.call (aget Util "getCurrentLocaleAsync")
+         Util))

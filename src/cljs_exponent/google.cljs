@@ -19,4 +19,6 @@ webClientId (string) -- The client id registered with Google for the app, used w
 
     Otherwise, returns { type: 'success', accessToken, idToken, serverAuthCode, user: {...profileInformation} }. accessToken is a string giving the access token to use with Google HTTP API requests."
   [options]
-  (.logInAsync Google (clj->js options)))
+  (.call (aget Google "logInAsync")
+         Google
+         (clj->js options)))
