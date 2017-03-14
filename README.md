@@ -1,6 +1,6 @@
 # cljs-exponent
 
-[Exponent.js](https://getexponent.com/) and React Native' clojurescript binding.
+[Expo](https://expo.io/) and React Native' clojurescript binding.
 
 [documentation](https://tiensonqin.github.io/cljs-exponent)
 
