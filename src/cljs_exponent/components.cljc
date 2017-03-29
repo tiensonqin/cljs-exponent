@@ -127,7 +127,7 @@
 #?(:clj
    (defn wrap-ex-component [js-name]
      `(def ~(symbol (to-kebab js-name))
-        (partial element (aget cljs-exponent.core/exponent "Components" ~js-name)))))
+        (partial element (aget cljs-exponent.core/exponent ~js-name)))))
 
 #?(:clj
    (defn wrap-glview []
@@ -149,7 +149,7 @@
    (defn wrap-ex-reagent-component [js-name]
      `(def ~(symbol (to-kebab js-name))
         (cljs-exponent.reagent/safe-adapt-react-class
-         (cljs.core/aget cljs-exponent.core/exponent "Components" ~js-name)))))
+         (cljs.core/aget cljs-exponent.core/exponent ~js-name)))))
 
 #?(:clj
    (defn wrap-reagent-glview []
