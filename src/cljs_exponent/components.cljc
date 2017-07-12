@@ -57,7 +57,6 @@
    "Image"
    "ListView"
    "Modal"
-   "Navigator"
    "NavigatorIOS"
    "Picker"
    "PickerIOS"
