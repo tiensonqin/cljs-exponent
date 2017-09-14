@@ -4,10 +4,9 @@
   #?(:cljs (:require [clojure.string :as str]
                      [cljs-exponent.core])))
 
-;; React Native v0.36.0
 (def rn-apis
-  ["ActionSheetIOS"
-   "AdSupportIOS"
+  ["AccessibilityInfo"
+   "ActionSheetIOS"
    "Alert"
    "AlertIOS"
    "Animated"
@@ -15,9 +14,9 @@
    "AppState"
    "AsyncStorage"
    "BackAndroid"
+   "BackHandler"
    "CameraRoll"
    "Clipboard"
-   "DatePickerAndroid"
    "Dimensions"
    "Easing"
    "Geolocation"
@@ -35,8 +34,9 @@
    "PanResponder"
    "PermissionsAndroid"
    "PixelRatio"
-   ;; "PushNotificationIOS"
+   "Platform"
    "Settings"
+   "Share"
    "StatusBarIOS"
    "StyleSheet"
    "Systrace"
@@ -51,11 +51,13 @@
    "Animated.Text"
    "Animated.View"
    "Animated.ScrollView"
+   "Button"
    "DatePickerIOS"
-   "KeyboardAvoidingView"
    "DrawerLayoutAndroid"
    "Image"
+   "KeyboardAvoidingView"
    "ListView"
+   "MaskedViewIOS"
    "Modal"
    "NavigatorIOS"
    "Picker"
@@ -64,11 +66,11 @@
    "ProgressViewIOS"
    "RefreshControl"
    "ScrollView"
+   "SectionList"
    "SegmentedControlIOS"
    "Slider"
-   "SliderIOS"
-   "StatusBar"
    "SnapshotViewIOS"
+   "StatusBar"
    "Switch"
    "TabBarIOS"
    "TabBarIOS.Item"
@@ -81,10 +83,14 @@
    "TouchableWithoutFeedback"
    "View"
    "ViewPagerAndroid"
+   "VirtualizedList"
    "WebView"])
 
+;; TODO full expo components and api support
 (def ex-components
   ["AppLoading"
+   "Assets"
+   "Font"
    "BarCodeScanner"
    "BlurView"
    "LinearGradient"
@@ -114,24 +120,30 @@
      (if element
        (apply (aget cljs-exponent.core/react "createElement") element (clj->js opts) children))))
 
+#?(:cljs
+   (defn partial-element
+     [& args]
+     (-> (apply partial element args)
+         (with-meta {:rn-element? true}))))
+
 #?(:clj
    (defn wrap-rn-component [js-name]
      (let [v (sp js-name)]
        (if (= 1 (count v))
          `(def ~(symbol (to-kebab js-name))
-            (partial element (aget cljs-exponent.core/react-native ~js-name)))
+            (partial-element (aget cljs-exponent.core/react-native ~js-name)))
          `(def ~(symbol (to-kebab js-name))
-            (partial element (aget cljs-exponent.core/react-native ~(first v) ~(second v))))))))
+            (partial-element (aget cljs-exponent.core/react-native ~(first v) ~(second v))))))))
 
 #?(:clj
    (defn wrap-ex-component [js-name]
      `(def ~(symbol (to-kebab js-name))
-        (partial element (aget cljs-exponent.core/exponent ~js-name)))))
+        (partial-element (aget cljs-exponent.core/exponent ~js-name)))))
 
 #?(:clj
    (defn wrap-glview []
      `(def ~'gl-view
-        (partial element (aget cljs-exponent.core/exponent "GLView")))))
+        (partial-element (aget cljs-exponent.core/exponent "GLView")))))
 
 #?(:clj
    (defn wrap-rn-reagent-component [js-name]
@@ -174,3 +186,14 @@
 
 #?(:cljs
    (wrap-all))
+
+;; utils
+#?(:cljs
+   (defn ios?
+     []
+     (= "ios" (aget platform "OS"))))
+
+#?(:cljs
+   (defn android?
+     []
+     (= "android" (aget platform "OS"))))

@@ -1,4 +1,4 @@
-(defproject cljs-exponent "0.1.7"
+(defproject cljs-exponent "0.1.8"
   :description "Expo cljs binding"
   :url "https://github.com/tiensonqin/cljs-exponent"
   :license {:name "Eclipse Public License"
