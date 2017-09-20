@@ -12,13 +12,15 @@
   [images]
   (for [image images]
     (when image
-      (.loadAsync (aget expo "Asset") image))))
+      (let [Asset (aget expo "Asset")]
+        (.call (aget Asset "loadAsync") Asset image)))))
 
 (defn- cache-fonts
   [fonts]
   (for [font fonts]
     (when font
-      (.loadAsync (aget expo "Font") font))))
+      (let [Font (aget expo "Font")]
+        (.call (aget Font "loadAsync") Font font)))))
 
 (defn- cast-as-array
   [coll]
@@ -29,7 +31,7 @@
 
 (defn all
   [coll]
-  (.all js/Promise (cast-as-array coll)))
+  (.call (aget js/Promise "all") js/Promise (cast-as-array coll)))
 
 (defn cache-assets
   [images fonts cb]

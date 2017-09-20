@@ -57,6 +57,7 @@
    "Image"
    "KeyboardAvoidingView"
    "ListView"
+   "FlatList"
    "MaskedViewIOS"
    "Modal"
    "NavigatorIOS"
