@@ -36,7 +36,12 @@
 (defn cache-assets
   [images fonts cb]
   (->
-   (all (concat (cache-fonts (clj->js fonts)) (cache-images (clj->js images))))
+   (all
+    (concat
+     (if (seq images)
+       (cache-images (clj->js images)))
+     (if (seq fonts)
+       (cache-fonts (clj->js fonts)))))
    (.then (fn [resp]
             (if cb (cb))))
    (.catch (fn [err]
