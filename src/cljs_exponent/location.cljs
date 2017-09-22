@@ -25,7 +25,8 @@ Returns an object with the following fields:
    speed (number) -- The instantaneous speed of the device in meters per second.
    timestamp (number) -- The time at which this position information was obtained, in milliseconds since epoch."
   [options]
-  (.getCurrentPositionAsync Location (clj->js options)))
+  (.call (aget Location ".getCurrentPositionAsync")
+         Location (clj->js options)))
 
 (defn watchPositionAsync
   "Subscribe to location updates from the device.
