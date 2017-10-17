@@ -1,8 +1,12 @@
 (ns cljs-exponent.components
-  #?(:clj (:require [clojure.string :as str]))
+  #?(:clj (:require [clojure.string :as str]
+                    [clojure.walk :as w]
+                    [clojure.set :as set]))
   #?(:cljs (:require-macros [cljs-exponent.components :refer [wrap-all]]))
   #?(:cljs (:require [clojure.string :as str]
-                     [cljs-exponent.core])))
+                     [cljs-exponent.core]
+                     [clojure.walk :as w]
+                     [clojure.set :as set])))
 
 (def rn-apis
   ["AccessibilityInfo"
@@ -111,6 +115,31 @@
 (defn sp [js-name]
   (str/split js-name #"\."))
 
+(defn kebab-case->camel-case
+  "Converts from kebab case to camel case, eg: on-click to onClick"
+  [input]
+  (let [words (str/split input #"-")
+        capitalize (->> (rest words)
+                        (map #(apply str (str/upper-case (first %)) (rest %))))]
+    (apply str (first words) capitalize)))
+
+(defn map-keys->camel-case
+  "Stringifys all the keys of a cljs hashmap and converts them
+   from kebab case to camel case. If :html-props option is specified,
+   then rename the html properties values to their dom equivalent
+   before conversion"
+  [data & {:keys [html-props]}]
+  (let [convert-to-camel (fn [[key value]]
+                           [(kebab-case->camel-case (name key)) value])]
+    (w/postwalk (fn [x]
+                  (if (map? x)
+                    (let [new-map (if html-props
+                                    (set/rename-keys x {:class :className :for :htmlFor})
+                                    x)]
+                      (into {} (map convert-to-camel new-map)))
+                    x))
+                data)))
+
 #?(:clj
    (defn wrap-rn-api [js-name]
      `(def ~(symbol (to-kebab js-name))
@@ -119,7 +148,9 @@
 #?(:cljs
    (defn element [element opts & children]
      (if element
-       (apply (aget cljs-exponent.core/react "createElement") element (clj->js opts) children))))
+       (apply (aget cljs-exponent.core/react "createElement") element
+         (clj->js (map-keys->camel-case opts :html-props true))
+         children))))
 
 #?(:cljs
    (defn partial-element
